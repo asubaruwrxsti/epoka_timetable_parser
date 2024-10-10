@@ -6,9 +6,9 @@ def get_table(html_content):
     return html_content[start:end]
 
 def get_table_headers(html_content):
-    pattern = re.compile(r'<th>(.*?)</th>', re.DOTALL)
+    pattern = re.compile(r'<th[^>]*>(.*?)</th>', re.DOTALL)
     headers = pattern.findall(html_content)
-    return headers
+    return [header.strip() for header in headers]
 
 def get_table_rows(html_content):
     start = html_content.find("<tbody>")
@@ -30,11 +30,11 @@ def get_timetable_days(html_content):
     table_headers = get_table_headers(html_content)
     day_index = table_headers.index("Day")
 
-    table = get_table_rows(html_content)
-    for row in table:
-        cells = re.findall(r'<td>(.*?)</td>', row, re.DOTALL)
-        print(cells)
-        # days.append(cells[day_index])
+    rows = get_table_rows(html_content)
+    for row in rows:
+        # print(row)
+        pattern = re.compile(r'<td[^>]*>(.*?)</td>', re.DOTALL)
+        print(pattern.findall(row))
     
     return days
 
