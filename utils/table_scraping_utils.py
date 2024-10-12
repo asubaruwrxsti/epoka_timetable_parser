@@ -48,8 +48,7 @@ def get_timetable_days(html_content):
 
     rows = get_table_rows(html_content)
     for index, row in enumerate(rows):
-        if index == 0: day = row[day_index]
-        else: day = row[day_index - 1]
+        day = row[day_index - 1]
         if day not in days: days.append(day)
     
     return days
@@ -62,12 +61,17 @@ def get_timetable_for_day(html_content, day):
     table_rows = get_table_rows(html_content)
     return [row for row in table_rows if row[0] == day]
 
+
 def parse_timetable_course_html(course_html):
     courses = []
+
+    html_content = get_html_content_from_file('timetable.html')
+    timetable_times = get_timetable_times(html_content)
     
     if isinstance(course_html, list):
-        for course in course_html[1:]:
-            if len(course) < 2: continue
+        for index, course in enumerate(course_html[1:]):
+            if len(course) < 2: 
+                continue
             
             soup = BeautifulSoup(course, 'lxml')
             
@@ -80,13 +84,15 @@ def parse_timetable_course_html(course_html):
                     continue
                 
                 course_code = tt_code.text.strip()
-                course_name = tt_full_name.find('em').text.strip()
-                classroom = tt_details.find('span').text.strip()
+                course_name = tt_full_name.find('em').text.strip() if tt_full_name.find('em') else ''
+                classroom = tt_details.find('span').text.strip() if tt_details.find('span') else ''
                 
+                # TODO: Course Time is wrong when consecutive courses are on the same day
                 courses.append({
                     'course_code': course_code,
                     'course_name': course_name,
-                    'classroom': classroom
+                    'classroom': classroom,
+                    'time': timetable_times[index]
                 })
     
     return courses
@@ -94,3 +100,7 @@ def parse_timetable_course_html(course_html):
 def get_html_content(url):
     response = requests.get(url)
     return response.text
+
+def get_html_content_from_file(file_path):
+    with open(file_path, 'r') as file:
+        return file.read()
