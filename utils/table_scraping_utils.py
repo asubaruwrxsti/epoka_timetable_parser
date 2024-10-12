@@ -1,4 +1,4 @@
-import re
+import re, requests
 from bs4 import BeautifulSoup
 
 def get_table(html_content):
@@ -94,3 +94,7 @@ def parse_timetable_course_html(course_html):
                 })
     
     return courses
+
+def get_html_content(url):
+    response = requests.get(url)
+    return response.text
