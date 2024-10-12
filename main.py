@@ -9,8 +9,8 @@ def main():
 
     with open("timetable.html", "r") as file:
         html_content = file.read()
-        table = tsu.get_timetable_days(html_content)
-        print(table)
+        table = tsu.get_timetable_for_day(html_content, "Monday")
+        print(tsu.parse_timetable_course_html(table[0]))
 
 def get_html_content(url):
     response = requests.get(url)
