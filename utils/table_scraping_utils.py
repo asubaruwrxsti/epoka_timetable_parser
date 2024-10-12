@@ -48,12 +48,9 @@ def get_timetable_days(html_content):
 
     rows = get_table_rows(html_content)
     for index, row in enumerate(rows):
-        if index == 0:
-            day = row[day_index]
-        else:
-            day = row[day_index - 1]
-        if day not in days:
-            days.append(day)
+        if index == 0: day = row[day_index]
+        else: day = row[day_index - 1]
+        if day not in days: days.append(day)
     
     return days
 
@@ -70,8 +67,7 @@ def parse_timetable_course_html(course_html):
     
     if isinstance(course_html, list):
         for course in course_html[1:]:
-            if len(course) < 2: 
-                continue
+            if len(course) < 2: continue
             
             soup = BeautifulSoup(course, 'lxml')
             
