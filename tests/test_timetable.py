@@ -1,8 +1,11 @@
 from fastapi.testclient import TestClient
 from api.api import app
 from api.config import Config
+from utils.table_scraping_utils import get_html_content
 
 client = TestClient(app)
+
+get_html_content(Config.TIMETABLE_URL)
 
 def test_get_timetable_unauthorized():
     response = client.get("/timetable")
