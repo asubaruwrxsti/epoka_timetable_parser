@@ -109,6 +109,8 @@ def parse_timetable_course_html(course_html, column_span_map):
 
 def get_html_content(url):
     response = requests.get(url)
+    with open('timetable.html', 'w') as file:
+        file.write(response.text)
     return response.text
 
 def get_html_content_from_file(file_path):
